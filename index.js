@@ -1,4 +1,3 @@
-
 //------------------------ Game Project---------------------------
 //Do you remember the game Battleship we created before? well .... it is time to make it with the DOM!!
 //We are providing you with the design of a board (in the DOM) for a player1, you have to create the board for the player2 using the id property 'board_player2' -> it is the second list (ul) in your index.html file
@@ -11,28 +10,122 @@
 //As our previous Battleship, the winner is the player that hits the 4 opponent's ships first
 //one more Thing create a 'reset' and a 'new game' buttons as childs of the element with the id 'buttons'. the reset button has to start the game again and the new game create a new game with new players and a new random board.
 
-const board_Player1 = document.getElementById('board_player1');
+//to do: 1. show lives 2. conditional for taking turns 3. conditional for strike
+// 4. announcing the winner and ending the game 5. explaning the game 6. hide ships from browser
 
-for (var x = 0; x < 4; x++) {
+//1. turn display changes only after both players play each round for the first time 2. Stop the game after winner is announced 3. reset and new buttons
+let player1 = {
+  name: prompt("Type in your name"),
+  shipCount: 0,
+  lives: 4,
+  playing: true,
+  board: [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ],
+};
+let player2 = {
+  name: prompt("Type in your name"),
+  shipCount: 0,
+  lives: 4,
+  playing: false,
+  board: [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ],
+};
 
-    const li = document.createElement('li'); // creating childs for the list (board), in this case represent a row number 'x' of the board
+const battleShip = (id, player, opponent) => {
+  const board = document.getElementById(`board_player${id}`);
+
+  const player1Name = document.querySelector("#name_player1");
+  const player2Name = document.querySelector("#name_player2");
+  const turn = document.querySelector("#turn_player");
+  const player_lives = document.querySelector(`#ships_player${id}`);
+
+  player_lives.textContent = player.lives;
+  player1Name.textContent = player1.name;
+  player2Name.textContent = player2.name;
+  turn.innerHTML = player1.name;
+
+  //generate random numbers between 0 and 3
+  while (player.shipCount < 4) {
+    let x = Math.floor(Math.random() * 4);
+    let y = Math.floor(Math.random() * 4);
+    if (player.board[x][y] == 0) {
+      player.board[x][y] = 1;
+      player.shipCount++;
+    } else {
+      continue;
+    }
+  }
+
+  for (var x = 0; x < 4; x++) {
+    const li = document.createElement("li"); // creating childs for the list (board), in this case represent a row number 'x' of the board
 
     for (var y = 0; y < 4; y++) {
-      const cell = document.createElement('div');
+      let cell = document.createElement("div");
       cell.className = "square"; // adding css properties to make it looks like a square
-      cell.textContent = `${x},${y}`;  // saves the coordinates as a string value 'x,y'
-      cell.value = 0;//state of the cell
+      cell.textContent = `${x},${y}: ${player.board[x][y]}`; // saves the coordinates as a string value 'x,y'
+      cell.value = player.board[x][y]; //state of the cell
+      cell.x = x;
+      cell.y = y;
 
       //this function adds the click event to each cell
-      cell.addEventListener( 'click', (e) => {
-          let cell = e.target; // get the element clicked
-          console.log( cell.textContent) //display the coordinates in the console
-          cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
-          //cell.style.background ="purple"; //with this propertie you can change the background color of the clicked cell. try comment the line bellow and uncomment this line. Do not forget to save this file and refresh the borwser to see the changes
+      cell.addEventListener("click", (e) => {
+        if (player.playing) {
+          return;
+        }
+
+        let cell = e.target; // get the element clicked
+        console.log(cell.textContent); //display the coordinates in the console
+        //cell.style.visibility = "hidden"; // this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
+
+        // cell.style.background = "purple"; //with this propertie you can change the background color of the clicked cell. try comment the line bellow and uncomment this line. Do not forget to save this file and refresh the borwser to see the changes
+
+        //strike opponent's ships
+        if (e.target.value == 1) {
+          cell.style.visibility = "hidden";
+          player.shipCount--;
+          player.lives--;
+          alert("You hit a ship!");
+        } else if (e.target.value == 0) {
+          cell.style.background = "purple";
+          alert("It's a miss!");
+        }
+
+        let updatedLives = document.querySelector(`#ships_player${id}`);
+        updatedLives.textContent = player.lives;
+
+        //taking turns
+        player.playing = true;
+        opponent.playing = false;
+
+        const turn = document.querySelector("#turn_player");
+        turn.innerHTML = opponent.name;
+
+        console.log(e.target.value);
+
+        //display the winner
+        if (player1.lives == 0 && player2.lives > 0) {
+          alert(`${player2.name} you won the game!`);
+          return `The winner is...${player2.name}!`;
+        } else if (player2.lives == 0 && player1.lives > 0) {
+          alert(`${player1.name} you won the game!`);
+          return `The winner is...${player1.name}!`;
+        }
       });
 
       li.appendChild(cell); //adding each cell into the row number x
     }
 
-     board_Player1.appendChild(li); //adding each row into the board
-}
+    board.appendChild(li); //adding each row into the board
+  }
+};
+
+battleShip(1, player1, player2);
+battleShip(2, player2, player1);
