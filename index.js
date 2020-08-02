@@ -13,7 +13,7 @@
 //to do: 1. show lives 2. conditional for taking turns 3. conditional for strike
 // 4. announcing the winner and ending the game 5. explaning the game 6. hide ships from browser
 
-//1. turn display changes only after both players play each round for the first time 2. Stop the game after winner is announced 3. reset and new buttons
+//1. turn display changes only after both players play each round for the first time 2. Stop the game after winner is announced 3. putting reset and new buttons side by side/reset the game
 let player1 = {
   name: prompt("Type in your name"),
   shipCount: 0,
@@ -113,9 +113,13 @@ const battleShip = (id, player, opponent) => {
         //display the winner
         if (player1.lives == 0 && player2.lives > 0) {
           alert(`${player2.name} you won the game!`);
+          alert("Loading a new game.");
+          location.reload();
           return `The winner is...${player2.name}!`;
         } else if (player2.lives == 0 && player1.lives > 0) {
           alert(`${player1.name} you won the game!`);
+          alert("Loading a new game.");
+          location.reload();
           return `The winner is...${player1.name}!`;
         }
       });
@@ -125,7 +129,17 @@ const battleShip = (id, player, opponent) => {
 
     board.appendChild(li); //adding each row into the board
   }
+  //reset and new buttons
+  const reset = document.querySelector("#button1");
+  reset.className = "button";
+  reset.textContent = "Reset";
+  reset.addEventListener("click", (e) => {});
+  const newGame = document.querySelector("#button2");
+  newGame.className = "button";
+  newGame.textContent = "New Game";
+  newGame.addEventListener("click", (e) => {
+    location.reload();
+  });
 };
-
 battleShip(1, player1, player2);
 battleShip(2, player2, player1);
