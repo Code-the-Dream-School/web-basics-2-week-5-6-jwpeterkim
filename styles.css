@@ -1,6 +1,6 @@
 * {
-margin: 0;
-padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -9,22 +9,22 @@ body {
   background: white;
 }
 
-h1{
+h1 {
   margin: 4%;
 }
 
-ul{
+ul {
   display: flex;
   list-style: none;
   flex-direction: column;
 }
 
-li{
+li {
   display: flex;
   flex-direction: row;
 }
 
-button{
+.button {
   background-color: inherit;
   border: solid;
   margin-top: 40%;
@@ -32,13 +32,13 @@ button{
   padding: 5px 8px;
 }
 
-button:hover{
+.button:hover {
   background-color: black;
   color: white;
   border: solid;
 }
 
-.square{
+.square {
   color: white;
   margin: 1%;
   background-color: black;
@@ -46,18 +46,18 @@ button:hover{
   height: 60px;
 }
 
-.game{
+.game {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
 
-.player{
+.player {
   padding: 4%;
   background-color: rgba(51, 50, 52, 0.21);
 }
 
-.player_information{
+.player_information {
   margin: 10% 0;
   display: flex;
   flex-direction: row;
